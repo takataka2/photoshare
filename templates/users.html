@@ -1,0 +1,33 @@
+{% extends "layout_login.html" %}
+
+{% block title %}
+    {{ user_id }}さんのページ
+{% endblock %}
+
+{% block contents %}
+
+<div class="box_c">
+    {% if is_fav %}
+        ⇒<a class="pure-button"
+        href="/fav/remove/{{ user_id }}">
+        お気に入りを外す</a>
+    {% else %}
+        <a class="pure-button"
+        href="/fav/add/{{ user_id }}">フォローする</a>
+    {% endif %}
+</div>
+<h3>投稿</h3>
+
+{% if text_list | length == 0 %}
+    投稿はまだありません。
+{% endif %}
+<div class="haiku-list">
+    {% for t in text_list %}
+        <div class="haiku">
+            {{ t.text | linebreak }}
+            <p class="info">{{ t.time | datestr }}</p>
+        </div>
+    {% endfor %}
+</div>
+
+{% endblock %}

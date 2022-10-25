@@ -1,0 +1,68 @@
+{% extends "layout_login.html" %}
+
+{% block contents %}
+<h3>写真一覧</h3>
+{% if photos | length == 0 %}
+    <div class="box">まだ写真はありません。</div>
+{% endif %}
+<div class="photo_list">
+    {% for i in photos %}
+        <div class="photo">
+            <div class="photo_border">
+                <img src='/photo/{{ i.file_id }}?t=thumb'
+                    width="300">
+                <span class="datetime">{{ i.created_at }}</span>
+            </div>
+            <div class="photo_info">
+                <a class="pure-button"
+                    href="/user/{{ i.user_id }}">{{ i.user_id }}さん</a> &gt;
+                <a class="pure-button"
+                    href="/album/{{ i.album_id }}">{{ i.name }}</a><br>
+            </div>
+        </div>
+{% endfor %}
+</div>
+<h3>俳句</h3>
+
+<div class="box pure-menu-horizontal pure-menu-scrollabel">
+    お気に入りのユーザー:
+    {% for u in fav_user %}
+        <a class="pure-button" href="/user/{{ u }}">{{ u }}</a>
+    {% endfor %}
+</div>
+
+<div clas="box pure-menu-horizontal pure-menu-scrollabel">
+    すべてのユーザー:
+    {% for u in user %}
+        <a class="pure-button" href="/user/{{ u }}">{{ u }}</a>
+    {% endfor %}
+</div>
+
+<h3>{{ id }}のタイムライン</h3>
+<div class="haiku-list">
+{% if timelines | length == 0 %}
+    <div class="box">タイムラインに投稿がありません。
+        なにか書くか他のユーザーをお気に入りにしてください。
+    </div>
+{% endif %}
+{% for i in timelines %}
+    <div class="haiku">
+        {{ i.text | linebreak }}
+        <p class="info">
+            {{ i.time | datestr }}
+            作: <a href="/user/{{ i.id }}">{{ i.id }}</a>
+        </p>
+    </div>
+{% endfor %}
+</div>
+<div class="haiku-list">
+    <form action="/write/try" method="POST"
+        class="pure-form">
+        <textarea name="text" rows="4"></textarea>
+        <br><br>
+        <button type="submit" class="pure-button pure-button-primary">
+        追加書き込み</button>
+    </form>
+</div>
+
+{% endblock %}
